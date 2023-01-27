@@ -38,7 +38,7 @@ func main() {
   states := map[interface{}]interface{} {
      "01": "TCP_ESTABLISHED",
      "02": "TCP_SYN_SENT",
-     "03": "TCP_SYN_SENT",
+     "03": "TCP_SYN_RECV",
      "04": "TCP_FIN_WAIT1",
      "05": "TCP_FIN_WAIT2",
      "06": "TCP_TIME_WAIT",
