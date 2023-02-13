@@ -18,7 +18,7 @@ func get_mem_address(mem string) string  {
   readable_memory := re.FindAllString(mem, -1)
   if readable_memory != nil {
    rm := strings.Join(readable_memory," ")
-   return rm[0:26]
+   return(strings.Split(rm," ")[0])
 
   }
   return rm
