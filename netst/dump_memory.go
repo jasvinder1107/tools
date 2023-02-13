@@ -14,14 +14,14 @@ import (
 func get_mem_address(mem string) string  {
 
   re := regexp.MustCompile(".*r..p.*")
-  var wm = ""
-  writable_memory := re.FindAllString(mem, -1)
-  if writable_memory != nil {
-   wm := strings.Join(writable_memory," ")
-   return wm[0:26]
+  var rm = ""
+  readable_memory := re.FindAllString(mem, -1)
+  if readable_memory != nil {
+   rm := strings.Join(readable_memory," ")
+   return rm[0:26]
 
   }
-  return wm
+  return rm
 
 }
 
@@ -80,10 +80,13 @@ func main() {
      fmt.Println("Could not close the file due to this error %s error \n", err)
   }
   for i := 0 ; i < len(linearray); i++ {
-
-     wm := get_mem_address(linearray[i])
-     if wm != "" {
-       dump_memory(wm[0:12],wm[13:25],openmem)
+     if strings.Contains(linearray[i], "vsyscall") {
+       continue
+     }
+     rm := get_mem_address(linearray[i])
+     if rm != "" {
+       ab := strings.Split(rm,"-")
+       dump_memory(strings.TrimSpace(ab[0]),strings.TrimSpace(ab[1]),openmem)
      }
 
   } 
