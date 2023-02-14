@@ -93,7 +93,7 @@ func main() {
 
   } 
  }else{
-  fmt.Println("This function takes a mandatory argument of --pid")
+  fmt.Println("This program takes a mandatory argument of --pid")
  }
  
 }
