@@ -26,13 +26,14 @@ func get_mem_address(mem string) string  {
 }
 
 
-func dump_memory(a string,b string,openmem *os.File) {
+func dump_memory(a string,b string,openmem *os.File,processPtr string) {
 
-   Outputfile := fmt.Sprintf("dump-%s-%s.bin",a,b)
+   Outputfile := fmt.Sprintf("dump-%s-%s-%s.bin",a,b,processPtr)
    Output,err := os.Create(Outputfile)
    if err != nil {
      fmt.Println("not able to create Ouput file")
    }
+   defer Output.Close()
    start, err1 := strconv.ParseInt(a,16,64)
    if err1 != nil {
      fmt.Println(err1)
@@ -70,6 +71,7 @@ func main() {
    fmt.Println("Couldn't be able to open the mem file")
   }
   defer openmaps.Close()
+  defer openmem.Close()
   fileScanner := bufio.NewScanner(openmaps)
   fileScanner.Split(bufio.ScanLines)
   var linearray []string
@@ -80,13 +82,13 @@ func main() {
      fmt.Println("Could not close the file due to this error %s error \n", err)
   }
   for i := 0 ; i < len(linearray); i++ {
-     if strings.Contains(linearray[i], "vsyscall") {
+     if strings.Contains(linearray[i], "vsyscall") || strings.Contains(linearray[i], "vvar") {
        continue
      }
      rm := get_mem_address(linearray[i])
      if rm != "" {
        ab := strings.Split(rm,"-")
-       dump_memory(strings.TrimSpace(ab[0]),strings.TrimSpace(ab[1]),openmem)
+       dump_memory(strings.TrimSpace(ab[0]),strings.TrimSpace(ab[1]),openmem,*processPtr)
      }
 
   } 
